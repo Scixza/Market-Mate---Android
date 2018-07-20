@@ -82,13 +82,14 @@ public class MainActivity extends AppCompatActivity
 
         //TODO:
         if (id == R.id.nav_home && !mHome) {
-
-        } else if (id == R.id.nav_account) {
-
+            //Send to home
+            mHome = true;
+        }  else if (id == R.id.nav_account) {
+            mHome = false;
         } else if (id == R.id.nav_list) {
-
+            mHome = false;
         } else if (id == R.id.nav_market) {
-
+            mHome = false;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
