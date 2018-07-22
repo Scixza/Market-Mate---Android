@@ -13,10 +13,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.model.Marker;
 import com.seanlohman.sean.marketmate.Fragments.GoogleMapsFragment;
+import com.seanlohman.sean.marketmate.Fragments.MarketDetails;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, GoogleMapsFragment.MarkerListener {
 
     private boolean mHome = true;
 
@@ -83,6 +85,7 @@ public class MainActivity extends AppCompatActivity
         //TODO:
         if (id == R.id.nav_home && !mHome) {
             //Send to home
+            getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout_Main, GoogleMapsFragment.newInstance()).commit();
             mHome = true;
         }  else if (id == R.id.nav_account) {
             mHome = false;
@@ -95,5 +98,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void openDetails(Marker m) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout_Main, MarketDetails.newInstance(m)).commit();
+        mHome = false;
     }
 }

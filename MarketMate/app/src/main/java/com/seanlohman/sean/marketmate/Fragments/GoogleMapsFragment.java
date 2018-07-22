@@ -58,6 +58,8 @@ public class GoogleMapsFragment extends SupportMapFragment implements OnMapReady
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(fullSailLive, 16);
         mMap.animateCamera(cameraUpdate);
 
+        mMap.setOnMarkerClickListener(this);
+
         MarkerOptions options = new MarkerOptions();
         options.title("Generic Farmers Market");
         options.position(fullSailLive);
