@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1076268611912",
+    "firebase_url": "https://marketmate-android-5f10d.firebaseio.com",
+    "project_id": "marketmate-android-5f10d",
+    "storage_bucket": "marketmate-android-5f10d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076268611912:android:b1e4ab2f55350907",
+        "android_client_info": {
+          "package_name": "com.seanlohman.sean.marketmate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1076268611912-ni7qnklo0g1r3b44pdpgg2fke9u004lv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.seanlohman.sean.marketmate",
+            "certificate_hash": "dea2919d263ddf51d7f31d1a4999de260301e5d9"
+          }
+        },
+        {
+          "client_id": "1076268611912-aod22j5m6esgfcnvaas82j9em296tm76.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDu78FIbMdPObCKurhtxk_pszyxRm8k8Y0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1076268611912-aod22j5m6esgfcnvaas82j9em296tm76.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
