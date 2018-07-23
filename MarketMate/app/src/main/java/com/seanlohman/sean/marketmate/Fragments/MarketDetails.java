@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.Marker;
+import com.seanlohman.sean.marketmate.Objects.Market;
 import com.seanlohman.sean.marketmate.R;
 
 import java.util.ArrayList;
@@ -21,18 +22,22 @@ public class MarketDetails extends android.support.v4.app.Fragment {
     private Marker currentMarker;
     private String mTitle;
     private Double mLat;
-    private Double mLong;
+    private Double mLng;
+    private String mHours;
+    private ArrayList<String> mItems;
 
     private TextView name, hours;
     private ArrayList<String> items;
     private ListView mList;
 
-    public static MarketDetails newInstance(Marker m) {
+    public static MarketDetails newInstance(Market m) {
 
         Bundle args = new Bundle();
-        args.putString("Title", m.getTitle());
-        args.putDouble("Lat", m.getPosition().latitude);
-        args.putDouble("Long", m.getPosition().longitude);
+        args.putString("Title", m.getmName());
+        args.putDouble("Lat", m.getmLat());
+        args.putDouble("Lng", m.getmLng());
+        args.putString("Hours", m.getmHours());
+        args.putStringArrayList("products", m.getmItems());
         MarketDetails fragment = new MarketDetails();
         fragment.setArguments(args);
         return fragment;
@@ -45,14 +50,18 @@ public class MarketDetails extends android.support.v4.app.Fragment {
         if (getArguments() != null){
             mTitle = getArguments().getString("Title");
             mLat = getArguments().getDouble("Lat");
-            mLong = getArguments().getDouble("Long");
+            mLng = getArguments().getDouble("Lng");
+            mHours = getArguments().getString("Hours");
+            mItems = getArguments().getStringArrayList("products");
         }
 
-        getFragmentManager().beginTransaction().replace(R.id.frameLayout_detail, MarketDetailsMap.newInstance()).commit();
+        if (getFragmentManager() != null) {
+            getFragmentManager().beginTransaction().replace(R.id.frameLayout_detail, MarketDetailsMap.newInstance(mLat, mLng)).commit();
+        }
         name.setText(mTitle);
-        //ArrayAdapter stringAdapter = new ArrayAdapter();
-        //mList.setAdapter();
-
+        hours.setText(mHours);
+        ArrayAdapter<String> stringAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_expandable_list_item_1, mItems);
+        mList.setAdapter(stringAdapter);
 
     }
 

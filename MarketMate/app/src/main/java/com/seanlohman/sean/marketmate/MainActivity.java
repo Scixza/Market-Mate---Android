@@ -1,8 +1,12 @@
 package com.seanlohman.sean.marketmate;
 
+import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,15 +16,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.maps.model.Marker;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.seanlohman.sean.marketmate.Fragments.GoogleMapsFragment;
 import com.seanlohman.sean.marketmate.Fragments.MarketDetails;
+import com.seanlohman.sean.marketmate.Objects.Market;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleMapsFragment.MarkerListener {
 
     private boolean mHome = true;
+    private static final int RC_SIGN_IN = 123;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +43,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mAuth = FirebaseAuth.getInstance();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -39,6 +56,9 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //TODO: Start map fragment here
+
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frameLayout_Main, GoogleMapsFragment.newInstance())
                 .commit();
@@ -88,6 +108,28 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout_Main, GoogleMapsFragment.newInstance()).commit();
             mHome = true;
         }  else if (id == R.id.nav_account) {
+
+            if (mAuth.getCurrentUser() != null){
+                Intent account = new Intent(MainActivity.this, AccountActivity.class);
+                account.putExtra("name", mAuth.getCurrentUser().getDisplayName());
+                account.putExtra("email", mAuth.getCurrentUser().getEmail());
+                Log.e("Logged In","Name: " + mAuth.getCurrentUser().getDisplayName() + " Email: " + mAuth.getCurrentUser().getEmail());
+                startActivity(account);
+            }else {
+                // Choose authentication providers
+                List<AuthUI.IdpConfig> providers = Arrays.asList(
+                        new AuthUI.IdpConfig.EmailBuilder().build(),
+                        new AuthUI.IdpConfig.GoogleBuilder().build());
+
+                // Create and launch sign-in intent
+                startActivityForResult(
+                        AuthUI.getInstance()
+                                .createSignInIntentBuilder()
+                                .setAvailableProviders(providers)
+                                .build(),
+                        RC_SIGN_IN);
+            }
+
             mHome = false;
         } else if (id == R.id.nav_list) {
             mHome = false;
@@ -101,8 +143,31 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void openDetails(Marker m) {
+    public void openDetails(Market m) {
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout_Main, MarketDetails.newInstance(m)).commit();
         mHome = false;
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+
+            if (resultCode == RESULT_OK) {
+                // Successfully signed in
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                // ...
+            } else {
+                // Sign in failed. If response is null the user canceled the
+                // sign-in flow using the back button. Otherwise check
+                // response.getError().getErrorCode() and handle the error.
+                // ...
+                Toast.makeText(this, "Sign In Failed", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
 }

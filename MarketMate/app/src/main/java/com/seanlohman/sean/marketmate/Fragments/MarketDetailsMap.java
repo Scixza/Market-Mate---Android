@@ -8,19 +8,36 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MarketDetailsMap extends SupportMapFragment implements OnMapReadyCallback {
 
-    public static MarketDetailsMap newInstance() { return new MarketDetailsMap(); }
+    public static MarketDetailsMap newInstance(Double lat, Double lng) {
+
+        Bundle args = new Bundle();
+        args.putDouble("Lat", lat);
+        args.putDouble("Lng", lng);
+        MarketDetailsMap fragment = new MarketDetailsMap();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     private GoogleMap mMap;
 
+    private Double mLat;
+    private Double mLng;
 
 
     @Override
     public void onActivityCreated(Bundle bundle) {
         super.onActivityCreated(bundle);
+
+        if (getArguments() != null){
+            mLat = getArguments().getDouble("Lat");
+            mLng = getArguments().getDouble("Lng");
+        }
+
         getMapAsync(this);
     }
 
@@ -28,15 +45,13 @@ public class MarketDetailsMap extends SupportMapFragment implements OnMapReadyCa
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        LatLng fullSailLive = new LatLng(28.595898, -81.304400);
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(fullSailLive, 16);
+        LatLng markerLatLng = new LatLng(mLat, mLng);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(markerLatLng, 16);
         mMap.animateCamera(cameraUpdate);
 
         MarkerOptions options = new MarkerOptions();
-        options.title("Generic Farmers Market");
-        options.position(fullSailLive);
-        options.snippet("3535 Forsyth Rd\n" +
-                "Winter Park, FL 32792");
+        //options.title("Generic Farmers Market");
+        options.position(markerLatLng);
 
         mMap.addMarker(options);
     }

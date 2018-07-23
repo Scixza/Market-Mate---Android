@@ -10,25 +10,17 @@ public class Market {
 
     private String mName;
     private String mAddress;
-    private String mZip;
     private Double mLat;
-    private Double mLong;
-    private Image mImage;
+    private Double mLng;
     private ArrayList<String> mItems;
+    private String mHours;
 
-    public Market(String name, String address, String zip, Double lat, Double longi, Image image, ArrayList<String> items){
+    public Market(String name, String address, Double lat, Double lng, String hours, ArrayList<String> items){
         mName = name;
         mAddress = address;
-        mZip = zip;
         mLat = lat;
-        mLong = longi;
-        mImage = image;
-        mItems = items;
-    }
-
-    public Market(String name, String address, ArrayList<String> items){
-        mName = name;
-        mAddress = address;
+        mLng = lng;
+        mHours = hours;
         mItems = items;
     }
 
@@ -40,20 +32,12 @@ public class Market {
         return mAddress;
     }
 
-    public String getmZip() {
-        return mZip;
-    }
-
     public Double getmLat() {
         return mLat;
     }
 
-    public Double getmLong() {
-        return mLong;
-    }
-
-    public Image getmImage() {
-        return mImage;
+    public Double getmLng() {
+        return mLng;
     }
 
     public ArrayList<String> getmItems() {
@@ -75,5 +59,9 @@ public class Market {
         }
 
         return returnString;
+    }
+
+    public String getmHours() {
+        return mHours;
     }
 }
