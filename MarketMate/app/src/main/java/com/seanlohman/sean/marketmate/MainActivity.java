@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -55,6 +56,43 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        if (mAuth.getCurrentUser() != null){
+
+            View headerView = navigationView.getHeaderView(0);
+            TextView navUsername = (TextView) headerView.findViewById(R.id.textView_name);
+            navUsername.setText(mAuth.getCurrentUser().getDisplayName());
+            TextView navEmail = (TextView) headerView.findViewById(R.id.textView_email);
+            navEmail.setText(mAuth.getCurrentUser().getEmail());
+            headerView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mAuth.getCurrentUser() != null){
+                        Intent account = new Intent(MainActivity.this, AccountActivity.class);
+                        account.putExtra("name", mAuth.getCurrentUser().getDisplayName());
+                        account.putExtra("email", mAuth.getCurrentUser().getEmail());
+
+                        Log.e("Logged In","Name: " + mAuth.getCurrentUser().getDisplayName() + " Email: " + mAuth.getCurrentUser().getEmail());
+                        startActivity(account);
+                    }else {
+                        // Choose authentication providers-
+                        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                                new AuthUI.IdpConfig.EmailBuilder().build(),
+                                new AuthUI.IdpConfig.GoogleBuilder().build());
+
+                        // Create and launch sign-in intent
+                        startActivityForResult(
+                                AuthUI.getInstance()
+                                        .createSignInIntentBuilder()
+                                        .setAvailableProviders(providers)
+                                        .build(),
+                                RC_SIGN_IN);
+                    }
+
+                    mHome = false;
+                }
+            });
+        }
+
         //TODO: Start map fragment here
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -63,6 +101,7 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.frameLayout_Main, GoogleMapsFragment.newInstance())
                 .commit();
     }
+
 
     @Override
     public void onBackPressed() {
@@ -74,27 +113,27 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -113,10 +152,11 @@ public class MainActivity extends AppCompatActivity
                 Intent account = new Intent(MainActivity.this, AccountActivity.class);
                 account.putExtra("name", mAuth.getCurrentUser().getDisplayName());
                 account.putExtra("email", mAuth.getCurrentUser().getEmail());
+
                 Log.e("Logged In","Name: " + mAuth.getCurrentUser().getDisplayName() + " Email: " + mAuth.getCurrentUser().getEmail());
                 startActivity(account);
             }else {
-                // Choose authentication providers
+                // Choose authentication providers-
                 List<AuthUI.IdpConfig> providers = Arrays.asList(
                         new AuthUI.IdpConfig.EmailBuilder().build(),
                         new AuthUI.IdpConfig.GoogleBuilder().build());
@@ -132,10 +172,28 @@ public class MainActivity extends AppCompatActivity
 
             mHome = false;
         } else if (id == R.id.nav_list) {
-            mHome = false;
-        } else if (id == R.id.nav_market) {
+            if (mAuth.getCurrentUser() != null){
+                Intent account = new Intent(MainActivity.this, ListActivity.class);
+                startActivity(account);
+            }else {
+                // Choose authentication providers-
+                List<AuthUI.IdpConfig> providers = Arrays.asList(
+                        new AuthUI.IdpConfig.EmailBuilder().build(),
+                        new AuthUI.IdpConfig.GoogleBuilder().build());
+
+                // Create and launch sign-in intent
+                startActivityForResult(
+                        AuthUI.getInstance()
+                                .createSignInIntentBuilder()
+                                .setAvailableProviders(providers)
+                                .build(),
+                        RC_SIGN_IN);
+            }
             mHome = false;
         }
+        //else if (id == R.id.nav_market) {
+//            mHome = false;
+//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -159,13 +217,18 @@ public class MainActivity extends AppCompatActivity
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 // ...
+                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                View headerView = navigationView.getHeaderView(0);
+                TextView navUsername = (TextView) headerView.findViewById(R.id.textView_name);
+                navUsername.setText(mAuth.getCurrentUser().getDisplayName());
+                TextView navEmail = (TextView) headerView.findViewById(R.id.textView_email);
+                navEmail.setText(mAuth.getCurrentUser().getEmail());
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
                 // ...
                 Toast.makeText(this, "Sign In Failed", Toast.LENGTH_SHORT).show();
-                finish();
             }
         }
     }
