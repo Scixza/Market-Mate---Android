@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -110,15 +111,33 @@ public class GoogleMapsFragment extends SupportMapFragment implements OnMapReady
             locationCt = locationManagerCt
                     .getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-            LatLng latLng = new LatLng(locationCt.getLatitude(),
-                    locationCt.getLongitude());
+            if (locationCt != null){
 
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 16);
+                Log.e("Users Location", "Lat: " + locationCt.getLatitude() + " Lng: " + locationCt.getLongitude());
 
-            mMap.animateCamera(cameraUpdate);
+                LatLng latLng = new LatLng(locationCt.getLatitude(),
+                        locationCt.getLongitude());
 
-            new JSONTask().execute("32832");
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10);
 
+                mMap.animateCamera(cameraUpdate);
+
+                //TODO: Get Users Longitude and Latitude and parse the Google GEOCODE API to get the users current ZIPCODE
+
+                new JSONTask().execute(String.valueOf(locationCt.getLatitude()), String.valueOf(locationCt.getLongitude()));
+
+            } else {
+
+                LatLng latLng = new LatLng(38,
+                        -96);
+
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 3);
+
+                mMap.animateCamera(cameraUpdate);
+            }
+
+        }else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
     }
 
@@ -140,25 +159,48 @@ public class GoogleMapsFragment extends SupportMapFragment implements OnMapReady
             super.onPreExecute();
 
             pd = new ProgressDialog(getActivity());
-            pd.setMessage("Please wait");
+            pd.setMessage("Loading Market Information");
             pd.setCancelable(false);
             pd.show();
         }
 
         @Override
         protected String doInBackground(String... strings) {
-            HttpURLConnection connection = null;
+            HttpsURLConnection connection = null;
             BufferedReader reader = null;
             markets = new ArrayList<>();
 
             try {
-                URL url = new URL("https://search.ams.usda.gov/farmersmarkets/v1/data.svc/zipSearch?zip=" + strings[0]);
+
+                URL url = new URL("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + strings[0] + "," + strings[1] + "&key=AIzaSyCKZZdcJBVkFpz_JdhW6AGqOT6YtvYB0AQ");
                 connection = (HttpsURLConnection) url.openConnection();
                 connection.connect();
 
                 InputStream is = connection.getInputStream();
 
                 String data = IOUtils.toString(is, "UTF-8");
+
+                is.close();
+
+                connection.disconnect();
+
+                JSONObject jsonObject = new JSONObject(data);
+                JSONArray resultArray = jsonObject.getJSONArray("results");
+                JSONObject objectZero = resultArray.getJSONObject(0);
+                JSONArray addressArray = objectZero.getJSONArray("address_components");
+                JSONObject innerArrayObject = addressArray.getJSONObject(7);
+                String zip = innerArrayObject.getString("long_name");
+
+
+                Log.e("GEOCODE information","Location Data: " + zip);
+
+                url = new URL("https://search.ams.usda.gov/farmersmarkets/v1/data.svc/zipSearch?zip=" + zip);
+                connection = (HttpsURLConnection) url.openConnection();
+                connection.connect();
+
+                is = connection.getInputStream();
+
+                data = IOUtils.toString(is, "UTF-8");
 
                 is.close();
 
@@ -255,6 +297,12 @@ public class GoogleMapsFragment extends SupportMapFragment implements OnMapReady
                 updateMap();
             }
         }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
     }
 }
