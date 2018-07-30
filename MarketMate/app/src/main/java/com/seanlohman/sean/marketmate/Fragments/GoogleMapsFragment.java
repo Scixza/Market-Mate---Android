@@ -6,21 +6,16 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -32,7 +27,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.seanlohman.sean.marketmate.MainActivity;
 import com.seanlohman.sean.marketmate.Objects.Market;
 import com.seanlohman.sean.marketmate.R;
 
@@ -44,14 +38,10 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Objects;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -61,7 +51,7 @@ public class GoogleMapsFragment extends SupportMapFragment implements OnMapReady
 
     private ArrayList<Market> markets;
 
-    private HashMap<Marker, Integer> mHashMap = new HashMap<>();
+    private final HashMap<Marker, Integer> mHashMap = new HashMap<>();
 
     private MarkerListener mListener;
 
@@ -85,9 +75,6 @@ public class GoogleMapsFragment extends SupportMapFragment implements OnMapReady
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -95,10 +82,9 @@ public class GoogleMapsFragment extends SupportMapFragment implements OnMapReady
             Log.e("Tag","Settings Pressed");
 
 
-            /* Alert Dialog Code Start*/
             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-            alert.setTitle("Search By Zipcode"); //Set Alert dialog title here
-            alert.setMessage("Enter a zipcode"); //Message here
+            alert.setTitle("Search By Zipcode");
+            alert.setMessage("Enter a zipcode");
 
             // Set an EditText view to get user input
             final EditText input = new EditText(getContext());
@@ -106,8 +92,6 @@ public class GoogleMapsFragment extends SupportMapFragment implements OnMapReady
 
             alert.setPositiveButton("Search", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
-            //You will get as string input data in this variable.
-            // here we convert the input to a string and show in a toast.
                     String srt = input.getEditableText().toString();
 
                     if (srt.length() == 5){
@@ -125,17 +109,16 @@ public class GoogleMapsFragment extends SupportMapFragment implements OnMapReady
                         dialog.cancel();
                     }
 
-                } // End of onClick(DialogInterface dialog, int whichButton)
-            }); //End of alert.setPositiveButton
+                }
+            });
             alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
             // Canceled.
                     dialog.cancel();
                 }
-            }); //End of alert.setNegativeButton
+            });
             AlertDialog alertDialog = alert.create();
             alertDialog.show();
-            /* Alert Dialog Code End*/
 
 
             return true;
@@ -239,7 +222,7 @@ public class GoogleMapsFragment extends SupportMapFragment implements OnMapReady
 
         @Override
         protected String doInBackground(String... strings) {
-            HttpsURLConnection connection = null;
+            HttpsURLConnection connection;
             BufferedReader reader = null;
             markets = new ArrayList<>();
 
@@ -386,7 +369,7 @@ public class GoogleMapsFragment extends SupportMapFragment implements OnMapReady
 
         @Override
         protected String doInBackground(String... strings) {
-            HttpsURLConnection connection = null;
+            HttpsURLConnection connection;
             BufferedReader reader = null;
             markets = new ArrayList<>();
 
@@ -498,9 +481,4 @@ public class GoogleMapsFragment extends SupportMapFragment implements OnMapReady
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-    }
 }

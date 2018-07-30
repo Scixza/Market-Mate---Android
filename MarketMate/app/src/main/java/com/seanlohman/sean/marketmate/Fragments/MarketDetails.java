@@ -1,14 +1,12 @@
 package com.seanlohman.sean.marketmate.Fragments;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,27 +15,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.seanlohman.sean.marketmate.Objects.Market;
 import com.seanlohman.sean.marketmate.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MarketDetails extends android.support.v4.app.Fragment {
 
-    private Marker currentMarker;
+    // --Commented out by Inspection (7/26/2018 7:50 PM):private Marker currentMarker;
     private String mTitle;
     private Double mLat;
     private Double mLng;
@@ -46,10 +35,8 @@ public class MarketDetails extends android.support.v4.app.Fragment {
     private int index;
 
     private TextView name, hours;
-    private ArrayList<String> storedItems;
+    // --Commented out by Inspection (7/26/2018 7:50 PM):private ArrayList<String> storedItems;
     private ListView mList;
-
-    private DetailsListener mListener;
 
     public static MarketDetails newInstance(Market m) {
 
@@ -64,8 +51,8 @@ public class MarketDetails extends android.support.v4.app.Fragment {
         return fragment;
     }
 
-    public interface DetailsListener{
-         void addItem(ArrayList<String> items);
+    private interface DetailsListener{
+         // --Commented out by Inspection (7/26/2018 7:50 PM):void addItem(ArrayList<String> items);
     }
 
     @Override
@@ -73,7 +60,7 @@ public class MarketDetails extends android.support.v4.app.Fragment {
         super.onAttach(context);
 
         if (context instanceof DetailsListener){
-            mListener = (DetailsListener) context;
+            DetailsListener mListener = (DetailsListener) context;
         }
     }
 

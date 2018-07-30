@@ -7,21 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInApi;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class AccountActivity extends AppCompatActivity {
 
-    FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

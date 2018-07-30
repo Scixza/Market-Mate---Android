@@ -20,9 +20,8 @@ import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity {
 
-    private ListView mList;
     private ArrayList<String> mItems;
-    ArrayAdapter<String> adapter;
+    private ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,7 +31,7 @@ public class ListActivity extends AppCompatActivity {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        mList = findViewById(R.id.listView_listActivity);
+        ListView mList = findViewById(R.id.listView_listActivity);
         mItems = new ArrayList<>();
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, mItems);

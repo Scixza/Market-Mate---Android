@@ -1,23 +1,17 @@
 package com.seanlohman.sean.marketmate.Objects;
 
-import android.media.Image;
-import android.widget.ArrayAdapter;
-
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Market {
 
-    private String mName;
-    private String mAddress;
-    private Double mLat;
-    private Double mLng;
-    private ArrayList<String> mItems;
-    private String mHours;
+    private final String mName;
+    private final Double mLat;
+    private final Double mLng;
+    private final ArrayList<String> mItems;
+    private final String mHours;
 
     public Market(String name, String address, Double lat, Double lng, String hours, ArrayList<String> items){
         mName = name;
-        mAddress = address;
         mLat = lat;
         mLng = lng;
         mHours = hours;
@@ -28,9 +22,11 @@ public class Market {
         return mName;
     }
 
-    public String getmAddress() {
-        return mAddress;
-    }
+// --Commented out by Inspection START (7/26/2018 7:50 PM):
+//    public String getmAddress() {
+//        return mAddress;
+//    }
+// --Commented out by Inspection STOP (7/26/2018 7:50 PM)
 
     public Double getmLat() {
         return mLat;
@@ -44,22 +40,26 @@ public class Market {
         return mItems;
     }
 
-    public String getItem(int i){
-        return mItems.get(i);
-    }
+// --Commented out by Inspection START (7/26/2018 7:50 PM):
+//    public String getItem(int i){
+//        return mItems.get(i);
+//    }
+// --Commented out by Inspection STOP (7/26/2018 7:50 PM)
 
-    public String getItem2(String s){
-
-        String returnString = "null";
-
-        for (String string: mItems) {
-            if (s.equals(string)){
-                returnString = string;
-            }
-        }
-
-        return returnString;
-    }
+// --Commented out by Inspection START (7/26/2018 7:50 PM):
+//    public String getItem2(String s){
+//
+//        String returnString = "null";
+//
+//        for (String string: mItems) {
+//            if (s.equals(string)){
+//                returnString = string;
+//            }
+//        }
+//
+//        return returnString;
+//    }
+// --Commented out by Inspection STOP (7/26/2018 7:50 PM)
 
     public String getmHours() {
         return mHours;

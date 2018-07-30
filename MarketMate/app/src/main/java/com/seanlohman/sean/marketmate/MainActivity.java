@@ -3,8 +3,6 @@ package com.seanlohman.sean.marketmate;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
@@ -14,14 +12,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.seanlohman.sean.marketmate.Fragments.GoogleMapsFragment;
@@ -42,26 +38,26 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         mAuth = FirebaseAuth.getInstance();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         if (mAuth.getCurrentUser() != null){
 
             View headerView = navigationView.getHeaderView(0);
-            TextView navUsername = (TextView) headerView.findViewById(R.id.textView_name);
+            TextView navUsername = headerView.findViewById(R.id.textView_name);
             navUsername.setText(mAuth.getCurrentUser().getDisplayName());
-            TextView navEmail = (TextView) headerView.findViewById(R.id.textView_email);
+            TextView navEmail = headerView.findViewById(R.id.textView_email);
             navEmail.setText(mAuth.getCurrentUser().getEmail());
             headerView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -105,7 +101,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -195,7 +191,7 @@ public class MainActivity extends AppCompatActivity
 //            mHome = false;
 //        }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -217,11 +213,11 @@ public class MainActivity extends AppCompatActivity
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 // ...
-                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                NavigationView navigationView = findViewById(R.id.nav_view);
                 View headerView = navigationView.getHeaderView(0);
-                TextView navUsername = (TextView) headerView.findViewById(R.id.textView_name);
+                TextView navUsername = headerView.findViewById(R.id.textView_name);
                 navUsername.setText(mAuth.getCurrentUser().getDisplayName());
-                TextView navEmail = (TextView) headerView.findViewById(R.id.textView_email);
+                TextView navEmail = headerView.findViewById(R.id.textView_email);
                 navEmail.setText(mAuth.getCurrentUser().getEmail());
             } else {
                 // Sign in failed. If response is null the user canceled the
