@@ -228,7 +228,8 @@ public class GoogleMapsFragment extends SupportMapFragment implements OnMapReady
 
             try {
 
-                URL url = new URL("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + strings[0] + "," + strings[1] + "&key=AIzaSyCKZZdcJBVkFpz_JdhW6AGqOT6YtvYB0AQ");
+                URL url = new URL("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + strings[0] + "," + strings[1] + "&key=AIzaSyA6tsrH6pbFP3by7CQ3DrfimZoigvbXoAA");
+                Log.e("Tag",url.toString());
                 connection = (HttpsURLConnection) url.openConnection();
                 connection.connect();
 
