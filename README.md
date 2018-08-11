@@ -1,4 +1,4 @@
-# LohmanSean_1807
+# Market Mate - Android
 Install by dragging APK into Android Device
 
 Hardware Requirements:
@@ -9,5 +9,5 @@ Log in information:
  - Password: testpassword
 
 List of known bugs:
- - Application closes itself after click the back arrow within the sign-in UI
+ - Application has unknown bugs on different android versions.
 
